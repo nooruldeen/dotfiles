@@ -1,5 +1,48 @@
 {
-  "theme": "dark-ansi",
+  "enabledPlugins": {
+    "swift-lsp@claude-plugins-official": true,
+    "ruflo-agentdb@ruflo": true,
+    "ruflo-autopilot@ruflo": true,
+    "ruflo-core@ruflo": true,
+    "ruflo-ddd@ruflo": true,
+    "ruflo-docs@ruflo": true,
+    "ruflo-goals@ruflo": true,
+    "ruflo-intelligence@ruflo": true,
+    "ruflo-knowledge-graph@ruflo": true,
+    "ruflo-observability@ruflo": true,
+    "ruflo-swarm@ruflo": true,
+    "ruflo-testgen@ruflo": true,
+    "supabase@claude-plugins-official": true,
+    "ui-ux-pro-max@ui-ux-pro-max-skill": true,
+    "scroll-world@scroll-world": true
+  },
+  "extraKnownMarketplaces": {
+    "expo-plugins": {
+      "source": {
+        "source": "github",
+        "repo": "expo/skills"
+      }
+    },
+    "ruflo": {
+      "source": {
+        "source": "github",
+        "repo": "ruvnet/ruflo"
+      }
+    },
+    "ui-ux-pro-max-skill": {
+      "source": {
+        "source": "github",
+        "repo": "nextlevelbuilder/ui-ux-pro-max-skill"
+      }
+    },
+    "scroll-world": {
+      "source": {
+        "source": "github",
+        "repo": "oso95/scroll-world"
+      }
+    }
+  },
+  "theme": "dark",
   "statusLine": {
     "type": "command",
     "command": "input=$(cat); model=$(echo \"$input\" | jq -r '.model.display_name'); used=$(echo \"$input\" | jq -r '.context_window.used_percentage // empty'); if [ -n \"$used\" ]; then printf \"%s | ctx: %.0f%% used\" \"$model\" \"$used\"; else printf \"%s\" \"$model\"; fi"

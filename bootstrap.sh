@@ -5,6 +5,20 @@ set -euo pipefail
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 
+# Pre-flight: surface the one setting that can destroy an existing machine.
+# This fork ships cleanup = "none"; upstream ships "zap". If a merge ever
+# reintroduces "zap" without the packages being declared first, this is the
+# last chance to notice before ~95 formulae get uninstalled.
+CLEANUP="$(sed -nE 's/^[[:space:]]*onActivation\.cleanup[[:space:]]*=[[:space:]]*"([^"]+)".*/\1/p' "$DIR/configuration.nix" | head -n1)"
+echo "==> Pre-flight: homebrew.onActivation.cleanup = \"${CLEANUP:-unset}\""
+if [ "$CLEANUP" != "none" ]; then
+  echo "    WARNING: this will REMOVE every Homebrew package not declared in"
+  echo "    configuration.nix. \"zap\" also deletes their data directories."
+  echo "    Currently installed: $(brew list --formula 2>/dev/null | wc -l | tr -d ' ') formulae, $(brew list --cask 2>/dev/null | wc -l | tr -d ' ') casks."
+  read -r -p "    Continue anyway? [y/N] " REPLY
+  [ "$REPLY" = "y" ] || [ "$REPLY" = "Y" ] || { echo "    Aborted."; exit 1; }
+fi
+
 echo "==> Step 1: Determinate Nix"
 if command -v nix >/dev/null 2>&1; then
   echo "    nix already installed, skipping"

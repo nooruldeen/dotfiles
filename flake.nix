@@ -18,7 +18,7 @@
     let
       # The one username line to change if this isn't your machine.
       # bootstrap.sh offers to rewrite this for you if your macOS username differs.
-      user = "kunchen";
+      user = "nooruldeen";
     in
     {
       darwinConfigurations."mac" = nix-darwin.lib.darwinSystem {
@@ -31,6 +31,14 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.extraSpecialArgs = { inherit user; };
+
+            # This machine already had a hand-written ~/.zshrc and other dotfiles
+            # before Home Manager existed here. Without a backup extension the
+            # first activation aborts with "would be clobbered" on every one of
+            # them. With it, the old file is renamed to <name>.hm-backup and
+            # activation proceeds. Keep this set.
+            home-manager.backupFileExtension = "hm-backup";
+
             home-manager.users.${user} = import ./home.nix;
           }
         ];

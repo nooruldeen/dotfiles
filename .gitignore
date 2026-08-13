@@ -17,3 +17,9 @@ result-*
 
 # no-mistakes local validation state - never commit in this public repo
 .no-mistakes/
+
+# Machine inventory snapshots: these list installed software, App Store apps
+# and data-directory sizes. Kept local, never pushed to this public fork.
+Brewfile.pre-nix
+Brewfile
+PLAN.md
