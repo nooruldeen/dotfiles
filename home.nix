@@ -18,6 +18,7 @@ in
     jq        # json on the command line
     lazygit
     neovim
+    tmux
     # Pi coding agent, from unstable: the packages in settings.json import
     # modules that 26.05's Pi (0.75) does not have. Pi installs those `npm:`
     # packages by running npm, so give it a Nix nodejs as a PATH *suffix*: any
@@ -142,6 +143,8 @@ in
     config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.config/nvim";
   home.file.".config/herdr".source =
     config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.config/herdr";
+  home.file.".config/tmux".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.config/tmux";
 
   # ~/.claude/settings.json is deliberately NOT symlinked, unlike upstream.
   #
