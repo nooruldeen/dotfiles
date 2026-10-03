@@ -37,8 +37,13 @@ merge without reading this file first.
   (username, installed software, App Store apps, data-directory sizes). Do not
   commit them to this public fork.
 
-- **Pi is not linked.** `home/.pi/` is kept in the tree so re-enabling is a
-  paste job, but `home.nix` does not symlink it.
+- **Pi comes from `nixpkgs-unstable`, not npm.** Upstream tells you to
+  `npm install -g` it; here `home.nix` installs `pi-coding-agent` from the
+  `nixpkgs-unstable` flake input, because the packages in
+  `home/.pi/agent/settings.json` fail to load on 26.05's Pi 0.75. It is wrapped
+  with a Nix `nodejs` as a PATH suffix because Pi shells out to npm for those
+  `npm:` packages. Update Pi with `nix flake update nixpkgs-unstable`; that
+  input is used for nothing else. Pi config links match upstream.
 
 - **`c` / `cx` are the plain agent aliases; `c-auto` / `cx-auto` are the
   permission-skipping ones.** Upstream maps `cc` / `co` directly to

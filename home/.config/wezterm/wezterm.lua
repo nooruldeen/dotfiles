@@ -10,6 +10,16 @@ config.macos_window_background_blur = 50
 config.hide_tab_bar_if_only_one_tab = true
 config.window_decorations = "RESIZE"
 
+-- Report modified keys precisely so TUI agents like Pi can tell Shift+Enter
+-- and Alt+Enter apart from a plain Enter.
+config.enable_kitty_keyboard = true
+
+config.keys = {
+	-- On macOS, WezTerm binds Option+Enter to fullscreen by default. Forward it
+	-- to the program instead, where Pi uses it to queue a follow-up message.
+	{ key = "Enter", mods = "ALT", action = wezterm.action.SendString("\x1b[13;3u") },
+}
+
 -- Dim unfocused windows so the focused one is obvious at a glance.
 local UNFOCUSED_FOREGROUND_TEXT_HSB = { hue = 1.0, saturation = 0.25, brightness = 0.45 }
 local UNFOCUSED_WINDOW_BACKGROUND_OPACITY = 0.62

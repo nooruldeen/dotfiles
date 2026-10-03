@@ -13,12 +13,14 @@ before merging upstream.
 
 - System settings (key repeat, dock, Finder, trackpad)
 - Homebrew apps: WezTerm, Codex, Herdr
-- Nix user packages: ripgrep, fd, fzf, jq, lazygit, Neovim, Hack Nerd Font
+- Nix user packages: ripgrep, fd, fzf, jq, lazygit, Neovim, Pi, Hack Nerd Font
 - Shell: zsh with oh-my-zsh's git plugin, autosuggestions, syntax highlighting
   and the Starship prompt
 - Editor: Neovim config, rose-pine moon
-- Terminal: WezTerm config, rose-pine moon, dimmed unfocused windows
-- Agent configs: Claude, Codex and OpenCode all share one `home/AGENTS.md`
+- Terminal: WezTerm config, rose-pine moon, dimmed unfocused windows, Kitty
+  keyboard protocol and Option+Enter forwarded to the program (for Pi)
+- Agent configs: Claude, Codex and OpenCode all share one `home/AGENTS.md`;
+  Pi gets its theme, extensions, `models.json` and `settings.json` linked
 
 ## The one thing to read before running this
 

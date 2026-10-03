@@ -1,8 +1,9 @@
-{ config, pkgs, user, ... }:
+{ config, pkgs, user, nixpkgs-unstable, ... }:
 
 let
   dotfiles = "${config.home.homeDirectory}/.dotfiles";
   home = config.home.homeDirectory;
+  pkgs-unstable = nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system};
 in
 
 {
@@ -17,6 +18,18 @@ in
     jq        # json on the command line
     lazygit
     neovim
+    # Pi coding agent, from unstable: the packages in settings.json import
+    # modules that 26.05's Pi (0.75) does not have. Pi installs those `npm:`
+    # packages by running npm, so give it a Nix nodejs as a PATH *suffix*: any
+    # node already on PATH still wins, and a fresh machine without one works.
+    (symlinkJoin {
+      name = "pi-coding-agent-wrapped";
+      paths = [ pkgs-unstable.pi-coding-agent ];
+      nativeBuildInputs = [ makeWrapper ];
+      postBuild = ''
+        wrapProgram $out/bin/pi --suffix PATH : ${lib.makeBinPath [ nodejs ]}
+      '';
+    })
     # the font everything renders in
     nerd-fonts.hack
   ];
@@ -144,11 +157,16 @@ in
   # discard the allowlist. Copy from the baseline by hand when setting up a new
   # machine.
 
-  # Pi is omitted for now: it is a post-video addition upstream and not part of
-  # the core Claude Code + Codex + Herdr workflow this machine is adopting
-  # first. Upstream links ~/.pi/agent/{themes,extensions,models.json,
-  # settings.json}; those files are still in this repo under home/.pi/ so
-  # re-enabling later is a paste job.
+  # Pi: link only the authored files and directories, so credentials, sessions
+  # and installed packages stay local under ~/.pi/agent.
+  home.file.".pi/agent/themes".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.pi/agent/themes";
+  home.file.".pi/agent/extensions".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.pi/agent/extensions";
+  home.file.".pi/agent/models.json".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.pi/agent/models.json";
+  home.file.".pi/agent/settings.json".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.pi/agent/settings.json";
 
   # One canonical instruction file, linked everywhere the agents look for it.
   home.file.".claude/CLAUDE.md".source =

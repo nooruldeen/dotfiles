@@ -12,9 +12,13 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
+
+    # Only for fast-moving tools whose stable-channel version is too old to be
+    # useful. Pi's third-party packages need a newer Pi than 26.05 carries.
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
   };
 
-  outputs = inputs@{ self, nix-darwin, nix-homebrew, home-manager, nixpkgs }:
+  outputs = inputs@{ self, nix-darwin, nix-homebrew, home-manager, nixpkgs, nixpkgs-unstable }:
     let
       # The one username line to change if this isn't your machine.
       # bootstrap.sh offers to rewrite this for you if your macOS username differs.
@@ -30,7 +34,7 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.extraSpecialArgs = { inherit user; };
+            home-manager.extraSpecialArgs = { inherit user nixpkgs-unstable; };
 
             # This machine already had a hand-written ~/.zshrc and other dotfiles
             # before Home Manager existed here. Without a backup extension the
